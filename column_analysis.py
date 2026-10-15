@@ -195,6 +195,54 @@ def find_correlated_pairs(x, names, threshold=0.95, max_rows=50000, seed=0):
     return out
 
 
+def find_determined_columns(x, names, max_values=11, exclude=()):
+    """Return pairs (b, a) where column b is fully determined by column a.
+
+    b is determined by a if every value of a (missing counted as a value) always comes
+    with the same value of b. Only columns a with at most max_values values are used,
+    because then a is one-hot encoded and b adds no information to the model.
+    """
+    codes = {}
+    for j, name in enumerate(names):
+        if name in exclude:
+            continue
+        v = np.nan_to_num(x[:, j].astype(np.float64), nan=-1e12)
+        u, inv = np.unique(v, return_inverse=True)
+        codes[name] = (inv.astype(np.int64), len(u))
+    pairs = []
+    for a, (ia, ka) in codes.items():
+        if ka > max_values:
+            continue
+        for b, (ib, kb) in codes.items():
+            if a == b or kb > ka or kb < 2:
+                continue
+            if len(np.unique(ia * 1000003 + ib)) == ka:
+                pairs.append((b, a))
+    return pairs
+
+
+def choose_determined_drops(pairs, names):
+    """Choose which determined columns to drop so that the information is kept.
+
+    Columns are visited from last to first; a column is dropped if a column that is
+    still kept determines it. Returns a dict {dropped column: column that determines it}.
+    """
+    by_b = {}
+    for b, a in pairs:
+        by_b.setdefault(b, []).append(a)
+    order = {n: i for i, n in enumerate(names)}
+    dropped = {}
+    for b in sorted(by_b, key=lambda n: -order[n]):
+        kept = [a for a in by_b[b] if a not in dropped]
+        if kept:
+            dropped[b] = min(kept, key=lambda n: order[n])
+    # follow chains (c determined by b, b determined by a) to the column that is kept
+    for b in dropped:
+        while dropped[b] in dropped:
+            dropped[b] = dropped[dropped[b]]
+    return dropped
+
+
 def leakage_scan(x, y01, names, min_answered=100, min_pos_rate=0.6):
     """Return columns that were answered mostly by positive people.
 
@@ -234,8 +282,8 @@ def load_decisions(path):
         return {row["name"]: row for row in csv.DictReader(f)}
 
 
-def summarize_decisions(decisions):
-    """Print the number of columns per action and the most common reasons."""
+def summarize_decisions(decisions, max_reasons=None):
+    """Print the number of columns per action and their reasons."""
     by_action = {}
     for d in decisions:
         by_action.setdefault(d["action"], []).append(d)
@@ -244,5 +292,5 @@ def summarize_decisions(decisions):
         reasons = {}
         for d in ds:
             reasons[d["reason"]] = reasons.get(d["reason"], 0) + 1
-        for r, n in sorted(reasons.items(), key=lambda t: -t[1])[:8]:
+        for r, n in sorted(reasons.items(), key=lambda t: -t[1])[:max_reasons]:
             print(f"      {n:4d}  {r}")

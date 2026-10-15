@@ -1,0 +1,322 @@
+name,action,missing_codes,zero_codes,reason
+_STATE,categorical,,,"nominal labels (US state code), not amounts (cell 7)"
+FMONTH,drop,,,"interview or survey weighting variable, not about the person (cell 3)"
+IDATE,drop,,,"interview or survey weighting variable, not about the person (cell 3)"
+IMONTH,drop,,,"interview or survey weighting variable, not about the person (cell 3)"
+IDAY,drop,,,"interview or survey weighting variable, not about the person (cell 3)"
+IYEAR,drop,,,"interview or survey weighting variable, not about the person (cell 3)"
+DISPCODE,drop,,,"interview or survey weighting variable, not about the person (cell 3)"
+SEQNO,drop,,,"interview or survey weighting variable, not about the person (cell 3)"
+_PSU,drop,,,"interview or survey weighting variable, not about the person (cell 3)"
+CTELENUM,drop,,,determined by PVTRESD1 (cell 4)
+PVTRESD1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+COLGHOUS,drop,,,determined by PVTRESD1 (cell 4)
+STATERES,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+CELLFON3,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+LADULT,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+NUMADULT,continuous,77 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+NUMMEN,continuous,77 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+NUMWOMEN,continuous,77 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+CTELNUM1,drop,,,determined by PVTRESD1 (cell 4)
+CELLFON2,drop,,,exact duplicate of CTELNUM1 (cell 4)
+CADULT,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+PVTRESD2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+CCLGHOUS,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+CSTATE,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+LANDLINE,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+HHADULT,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+GENHLTH,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+PHYSHLTH,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+MENTHLTH,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+POORHLTH,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+HLTHPLN1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+PERSDOC2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+MEDCOST,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+CHECKUP1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+BPHIGH4,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+BPMEDS,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+BLOODCHO,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+CHOLCHK,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+TOLDHI2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+CVDSTRK3,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+ASTHMA3,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+ASTHNOW,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+CHCSCNCR,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+CHCOCNCR,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+CHCCOPD1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+HAVARTH3,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+ADDEPEV2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+CHCKIDNY,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+DIABETE3,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+DIABAGE2,continuous,98 99,,"codebook p.21: 98 don't know, 99 refused; 77 is a real age (cell 8)"
+SEX,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+MARITAL,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+EDUCA,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+RENTHOM1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+NUMHHOL2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+NUMPHON2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+CPDEMO1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+VETERAN3,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+EMPLOY1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+CHILDREN,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+INCOME2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+INTERNET,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+WEIGHT2,drop,,,raw weight in mixed lb/kg units: keep WTKG3 (codebook)
+HEIGHT3,drop,,,raw height in mixed ft/in and m units: keep HTM4 (codebook)
+PREGNANT,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+QLACTLM2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+USEEQUIP,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+BLIND,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+DECIDE,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+DIFFWALK,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+DIFFDRES,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+DIFFALON,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+SMOKE100,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+SMOKDAY2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+STOPSMK2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+LASTSMK2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+USENOW3,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+ALCDAY5,continuous,777 999,555 888,"REVIEW codebook: unit-coded (1xx/2xx/3xx = per day/week/month), needs conversion"
+AVEDRNK2,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+DRNK3GE5,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+MAXDRNKS,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+FRUITJU1,continuous,777 999,555 888,"REVIEW codebook: unit-coded (1xx/2xx/3xx = per day/week/month), needs conversion"
+FRUIT1,continuous,777 999,555 888,"REVIEW codebook: unit-coded (1xx/2xx/3xx = per day/week/month), needs conversion"
+FVBEANS,continuous,777 999,555 888,"REVIEW codebook: unit-coded (1xx/2xx/3xx = per day/week/month), needs conversion"
+FVGREEN,continuous,777 999,555 888,"REVIEW codebook: unit-coded (1xx/2xx/3xx = per day/week/month), needs conversion"
+FVORANG,continuous,777 999,555 888,"REVIEW codebook: unit-coded (1xx/2xx/3xx = per day/week/month), needs conversion"
+VEGETAB1,continuous,777 999,555 888,"REVIEW codebook: unit-coded (1xx/2xx/3xx = per day/week/month), needs conversion"
+EXERANY2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+EXRACT11,categorical,,,"nominal labels (type of main exercise), not amounts (cell 7)"
+EXEROFT1,continuous,777 999,555 888,"REVIEW codebook: unit-coded (1xx/2xx/3xx = per day/week/month), needs conversion"
+EXERHMM1,continuous,777 999,555 888,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+EXRACT21,categorical,,,"nominal labels (type of second exercise), not amounts (cell 7)"
+EXEROFT2,continuous,777 999,555 888,"REVIEW codebook: unit-coded (1xx/2xx/3xx = per day/week/month), needs conversion"
+EXERHMM2,continuous,777 999,555 888,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+STRENGTH,continuous,777 999,555 888,"REVIEW codebook: unit-coded (1xx/2xx/3xx = per day/week/month), needs conversion"
+LMTJOIN3,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+ARTHDIS2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+ARTHSOCL,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+JOINPAIN,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+SEATBELT,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+FLUSHOT6,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+FLSHTMY2,continuous,777777 999999,,"REVIEW codebook: date coded as MMYYYY, convert to 'months ago' or drop"
+IMFVPLAC,categorical,,,"nominal labels (place of flu shot), not amounts (cell 7)"
+PNEUVAC3,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+HIVTST6,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+HIVTSTD3,continuous,777777 999999,,"REVIEW codebook: date coded as MMYYYY, convert to 'months ago' or drop"
+WHRTST10,categorical,,,"nominal labels (place of last HIV test), not amounts (cell 7)"
+PDIABTST,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+PREDIAB1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+INSULIN,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+BLDSUGAR,continuous,777 999,555 888,"REVIEW codebook: unit-coded (1xx/2xx/3xx = per day/week/month), needs conversion"
+FEETCHK2,continuous,777 999,555 888,"REVIEW codebook: unit-coded (1xx/2xx/3xx = per day/week/month), needs conversion"
+DOCTDIAB,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+CHKHEMO3,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+FEETCHK,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+EYEEXAM,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+DIABEYE,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+DIABEDU,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+CAREGIV1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+CRGVREL1,categorical,,,"nominal labels (caregiver relationship), not amounts (cell 7)"
+CRGVLNG1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+CRGVHRS1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+CRGVPRB1,categorical,,,"nominal labels (type of care problem), not amounts (cell 7)"
+CRGVPERS,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+CRGVHOUS,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+CRGVMST2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+CRGVEXPT,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+VIDFCLT2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+VIREDIF3,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+VIPRFVS2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+VINOCRE2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+VIEYEXM2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+VIINSUR2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+VICTRCT4,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+VIGLUMA2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+VIMACDG2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+CIMEMLOS,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+CDHOUSE,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+CDASSIST,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+CDHELP,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+CDSOCIAL,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+CDDISCUS,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+WTCHSALT,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+LONGWTCH,continuous,777 999,555 888,"REVIEW codebook: unit-coded (1xx/2xx/3xx = per day/week/month), needs conversion"
+DRADVISE,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+ASTHMAGE,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+ASATTACK,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+ASERVIST,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+ASDRVIST,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+ASRCHKUP,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+ASACTLIM,continuous,777 999,555 888,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+ASYMPTOM,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+ASNOSLEP,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+ASTHMED3,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+ASINHALR,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+HAREHAB1,drop,,,"label leakage: only asked after a heart attack, 100% positive (cell 6)"
+STREHAB1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+CVDASPRN,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+ASPUNSAF,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+RLIVPAIN,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+RDUCHART,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+RDUCSTRK,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+ARTTODAY,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+ARTHWGT,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+ARTHEXER,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+ARTHEDU,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+TETANUS,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+HPVADVC2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+HPVADSHT,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+SHINGLE2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+HADMAM,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+HOWLONG,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+HADPAP2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+LASTPAP2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+HPVTEST,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+HPLSTTST,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+HADHYST2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+PROFEXAM,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+LENGEXAM,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+BLDSTOOL,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+LSTBLDS3,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+HADSIGM3,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+HADSGCO1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+LASTSIG3,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+PCPSAAD2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+PCPSADI1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+PCPSARE1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+PSATEST1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+PSATIME,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+PCPSARS1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+PCPSADE1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+PCDMDECN,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+SCNTMNY1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+SCNTMEL1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+SCNTPAID,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+SCNTWRK1,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+SCNTLPAD,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+SCNTLWK1,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+SXORIENT,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+TRNSGNDR,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+RCSGENDR,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+RCSRLTN2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+CASTHDX2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+CASTHNO2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+EMTSUPRT,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+LSATISFY,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+ADPLEASR,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+ADDOWN,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+ADSLEEP,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+ADENERGY,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+ADEAT1,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+ADFAIL,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+ADTHINK,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+ADMOVE,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
+MISTMNT,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+ADANXEV,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+QSTVER,drop,,,"survey design variable; its signal comes from phone type or household size, kept as person columns (cell 3)"
+QSTLANG,drop,,,"interview or survey weighting variable, not about the person (cell 3)"
+MSCODE,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_STSTR,drop,,,"interview or survey weighting variable, not about the person (cell 3)"
+_STRWT,drop,,,"interview or survey weighting variable, not about the person (cell 3)"
+_RAWRAKE,drop,,,"survey design variable; its signal comes from phone type or household size, kept as person columns (cell 3)"
+_WT2RAKE,drop,,,"interview or survey weighting variable, not about the person (cell 3)"
+_CHISPNC,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_CRACE1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_CPRACE,drop,,,exact duplicate of _CRACE1 (cell 4)
+_CLLCPWT,drop,,,"interview or survey weighting variable, not about the person (cell 3)"
+_DUALUSE,drop,,,"interview or survey weighting variable, not about the person (cell 3)"
+_DUALCOR,drop,,,"interview or survey weighting variable, not about the person (cell 3)"
+_LLCPWT,drop,,,"interview or survey weighting variable, not about the person (cell 3)"
+_RFHLTH,drop,,,determined by GENHLTH (cell 4)
+_HCVU651,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_RFHYPE5,drop,,,determined by BPHIGH4 (cell 4)
+_CHOLCHK,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_RFCHOL,drop,,,determined by TOLDHI2 (cell 4)
+_LTASTH1,drop,,,determined by ASTHMA3 (cell 4)
+_CASTHM1,drop,,,determined by _ASTHMS1 (cell 4)
+_ASTHMS1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_DRDXAR1,drop,,,determined by HAVARTH3 (cell 4)
+_PRACE1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_MRACE1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_HISPANC,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_RACE,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_RACEG21,drop,,,determined by _RACE (cell 4)
+_RACEGR3,drop,,,determined by _RACE (cell 4)
+_RACE_G1,drop,,,determined by _RACE (cell 4)
+_AGEG5YR,continuous,14,,computed column in real units: only its own codes from SPECIAL (cell 8)
+_AGE65YR,drop,,,age group: keep _AGE80 (years) and _AGEG5YR (cell 5)
+_AGE80,continuous,,,computed column in real units: only its own codes from SPECIAL (cell 8)
+_AGE_G,drop,,,age group: keep _AGE80 (years) and _AGEG5YR (cell 5)
+HTIN4,drop,,,"height in inches, same as HTM4 (r = 1.000, cell 5)"
+HTM4,continuous,,,computed column in real units: only its own codes from SPECIAL (cell 8)
+WTKG3,continuous,,,computed column in real units: only its own codes from SPECIAL (cell 8)
+_BMI5,continuous,,,computed column in real units: only its own codes from SPECIAL (cell 8)
+_BMI5CAT,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_RFBMI5,drop,,,determined by _BMI5CAT (cell 4)
+_CHLDCNT,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_EDUCAG,drop,,,determined by EDUCA (cell 4)
+_INCOMG,drop,,,determined by INCOME2 (cell 4)
+_SMOKER3,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_RFSMOK3,drop,,,determined by _SMOKER3 (cell 4)
+DRNKANY5,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+DROCDY3_,continuous,900,,computed column in real units: only its own codes from SPECIAL (cell 8)
+_RFBING5,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_DRNKWEK,continuous,99900,,computed column in real units: only its own codes from SPECIAL (cell 8)
+_RFDRHV5,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+FTJUDA1_,continuous,,,computed column in real units: only its own codes from SPECIAL (cell 8)
+FRUTDA1_,continuous,,,computed column in real units: only its own codes from SPECIAL (cell 8)
+BEANDAY_,continuous,,,computed column in real units: only its own codes from SPECIAL (cell 8)
+GRENDAY_,continuous,,,computed column in real units: only its own codes from SPECIAL (cell 8)
+ORNGDAY_,continuous,,,computed column in real units: only its own codes from SPECIAL (cell 8)
+VEGEDA1_,continuous,,,computed column in real units: only its own codes from SPECIAL (cell 8)
+_MISFRTN,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_MISVEGN,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_FRTRESP,drop,,,determined by _MISFRTN (cell 4)
+_VEGRESP,drop,,,determined by _MISVEGN (cell 4)
+_FRUTSUM,continuous,,,computed column in real units: only its own codes from SPECIAL (cell 8)
+_VEGESUM,continuous,,,computed column in real units: only its own codes from SPECIAL (cell 8)
+_FRTLT1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_VEGLT1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_FRT16,drop,,,determined by _FRUITEX (cell 4)
+_VEG23,drop,,,determined by _VEGETEX (cell 4)
+_FRUITEX,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_VEGETEX,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_TOTINDA,drop,,,determined by EXERANY2 (cell 4)
+METVL11_,continuous,,,computed column in real units: only its own codes from SPECIAL (cell 8)
+METVL21_,continuous,,,computed column in real units: only its own codes from SPECIAL (cell 8)
+MAXVO2_,continuous,999,,computed column in real units: only its own codes from SPECIAL (cell 8)
+FC60_,continuous,999,,computed column in real units: only its own codes from SPECIAL (cell 8)
+ACTIN11_,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+ACTIN21_,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+PADUR1_,continuous,,,computed column in real units: only its own codes from SPECIAL (cell 8)
+PADUR2_,continuous,,,computed column in real units: only its own codes from SPECIAL (cell 8)
+PAFREQ1_,continuous,,,computed column in real units: only its own codes from SPECIAL (cell 8)
+PAFREQ2_,continuous,,,computed column in real units: only its own codes from SPECIAL (cell 8)
+_MINAC11,continuous,,,computed column in real units: only its own codes from SPECIAL (cell 8)
+_MINAC21,continuous,,,computed column in real units: only its own codes from SPECIAL (cell 8)
+STRFREQ_,continuous,,,computed column in real units: only its own codes from SPECIAL (cell 8)
+PAMISS1_,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+PAMIN11_,continuous,,,computed column in real units: only its own codes from SPECIAL (cell 8)
+PAMIN21_,continuous,,,computed column in real units: only its own codes from SPECIAL (cell 8)
+PA1MIN_,continuous,,,computed column in real units: only its own codes from SPECIAL (cell 8)
+PAVIG11_,continuous,,,computed column in real units: only its own codes from SPECIAL (cell 8)
+PAVIG21_,continuous,,,computed column in real units: only its own codes from SPECIAL (cell 8)
+PA1VIGM_,continuous,,,computed column in real units: only its own codes from SPECIAL (cell 8)
+_PACAT1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_PAINDX1,drop,,,determined by _PA150R2 (cell 4)
+_PA150R2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_PA300R2,drop,,,determined by _PACAT1 (cell 4)
+_PA30021,drop,,,determined by _PACAT1 (cell 4)
+_PASTRNG,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_PAREC1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_PASTAE1,drop,,,determined by _PAREC1 (cell 4)
+_LMTACT1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_LMTWRK1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_LMTSCL1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_RFSEAT2,drop,,,determined by SEATBELT (cell 4)
+_RFSEAT3,drop,,,determined by SEATBELT (cell 4)
+_FLSHOT6,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_PNEUMO2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
+_AIDTST3,drop,,,determined by HIVTST6 (cell 4)

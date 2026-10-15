@@ -1,0 +1,13 @@
+# data is not committed (too large; download from AIcrowd, see README)
+data/*
+!data/.gitkeep
+*.npz
+*.npy
+
+# python / jupyter
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# OS
+.DS_Store

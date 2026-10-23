@@ -7,6 +7,7 @@ applies it to any data. Each step can be turned off with the options argument,
 which we use for the ablation study.
 """
 import numpy as np
+from numpy.linalg import eig
 
 DEFAULT_OPTIONS = {
     "apply_drops": True,  # drop the columns marked "drop"
@@ -208,3 +209,61 @@ def print_report(params, show=("dropped", "one-hot", "continuous"), max_rows=Non
         print(f"\n--- {what} ({len(rows)}) ---")
         for name, _, detail, reason in rows[:max_rows]:
             print(f"  {name:10s} {detail[:60]:60s} | {reason}")
+
+class PCA:
+    """PCA from scratch: standardize, eigendecompose the covariance, project.
+
+    Rows are processed in chunks so a large float32 matrix is never copied to
+    float64 as a whole.
+    """
+
+    def __init__(self, n_components, chunk_size=20000):
+        self.n_components = n_components
+        self.chunk_size = chunk_size
+
+    def _standardize(self, chunk):
+        return (np.asarray(chunk, dtype=np.float64) - self.mean) / self.scale
+
+    def fit(self, X):
+        X = np.asarray(X)
+        n, d = X.shape
+        self.mean = X.mean(axis=0, dtype=np.float64)
+        # X.std would copy the whole matrix to float64, so sum squares per chunk
+        sq_dev = np.zeros(d)
+        for start in range(0, n, self.chunk_size):
+            chunk = np.asarray(X[start : start + self.chunk_size], dtype=np.float64)
+            sq_dev += ((chunk - self.mean) ** 2).sum(axis=0)
+        scale = np.sqrt(sq_dev / n)
+        # constant columns (possible in a CV fold) would divide by zero
+        self.scale = np.where(scale > 1e-8, scale, 1.0)
+
+        cov_mat = np.zeros((d, d))
+        for start in range(0, n, self.chunk_size):
+            z = self._standardize(X[start : start + self.chunk_size])
+            cov_mat += z.T @ z
+        cov_mat /= n - 1
+
+        # the covariance matrix is symmetric: eigh returns real, orthonormal vectors
+        eig_vals, eig_vecs = np.linalg.eigh(cov_mat)
+        order = np.argsort(eig_vals)[::-1]
+        eig_vals = eig_vals[order]
+        eig_vecs = eig_vecs[:, order]
+
+        # make the largest-magnitude entry of each eigenvector positive
+        max_abs_idx = np.argmax(np.abs(eig_vecs), axis=0)
+        signs = np.sign(eig_vecs[max_abs_idx, np.arange(d)])
+        signs[signs == 0] = 1.0
+        eig_vecs = eig_vecs * signs
+
+        self.components = eig_vecs[:, : self.n_components].T
+        self.explained_variance_ratio = eig_vals[: self.n_components] / eig_vals.sum()
+        self.cum_explained_variance = np.cumsum(self.explained_variance_ratio)
+        return self
+
+    def transform(self, X):
+        X = np.asarray(X)
+        out = np.empty((len(X), self.components.shape[0]))
+        for start in range(0, len(X), self.chunk_size):
+            z = self._standardize(X[start : start + self.chunk_size])
+            out[start : start + self.chunk_size] = z @ self.components.T
+        return out

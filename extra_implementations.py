@@ -2,6 +2,8 @@ import time
 from collections import Counter
 import numpy as np
 from preprocessing import PCA, fit_preprocess, transform
+
+
 def f1_score(y_true, y_pred):
     tp = np.sum((y_true == 1) & (y_pred == 1))
     fp = np.sum((y_true == 0) & (y_pred == 1))
@@ -25,7 +27,6 @@ def stratified_kfold_indices(y, n_splits, rng):
         yield train, val
 
 
-
 class K_nearest_neighbors:
 
     def __init__(self, n_neighbors=5, batch_size=32, threshold=0.5):
@@ -36,7 +37,7 @@ class K_nearest_neighbors:
     def fit(self, x, y):
         self.x_train = np.asarray(x, dtype=np.float32)
         self.y_train = np.asarray(y)
-        self.train_sq = (self.x_train ** 2).sum(axis=1)
+        self.train_sq = (self.x_train**2).sum(axis=1)
         return self
 
     def predict_proba(self, x):
@@ -44,13 +45,13 @@ class K_nearest_neighbors:
         k = self.n_neighbors
         out = np.empty(len(x))
         for start in range(0, len(x), self.batch_size):
-            chunk = x[start:start + self.batch_size]                  # (B, D)
-            chunk_sq = (chunk ** 2).sum(axis=1)[:, None]              # (B, 1)
+            chunk = x[start : start + self.batch_size]  # (B, D)
+            chunk_sq = (chunk**2).sum(axis=1)[:, None]  # (B, 1)
             dist = chunk_sq - 2 * chunk @ self.x_train.T + self.train_sq  # (B, N)
-            idx = np.argpartition(dist, k - 1, axis=1)[:, :k]         # (B, k)
-            out[start:start + self.batch_size] = self.y_train[idx].mean(axis=1)
+            idx = np.argpartition(dist, k - 1, axis=1)[:, :k]  # (B, k)
+            out[start : start + self.batch_size] = self.y_train[idx].mean(axis=1)
         return out
-   
+
     def predict(self, x):
         return (self.predict_proba(x) > self.threshold).astype(int)
 
@@ -64,11 +65,17 @@ class grid_search_KNN:
     threshold is applied to it.
     """
 
-    def __init__(self, n_components=(10, 20, 30, 50, 70, 100),
-                 thresholds=(0.08, 0.1, 0.2, 0.3, 0.5),
-                 n_neighbors=(5, 10, 15, 20),
-                 n_splits=10, batch_size=256, scoring=f1_score,
-                 random_state=42, verbose=True):
+    def __init__(
+        self,
+        n_components=(10, 20, 30, 50, 70, 100),
+        thresholds=(0.08, 0.1, 0.2, 0.3, 0.5),
+        n_neighbors=(5, 10, 15, 20),
+        n_splits=10,
+        batch_size=256,
+        scoring=f1_score,
+        random_state=42,
+        verbose=True,
+    ):
         self.verbose = verbose
         self.n_components = n_components
         self.thresholds = thresholds
@@ -86,8 +93,12 @@ class grid_search_KNN:
         self.preprocess_options_ = preprocess_options
 
         rng = np.random.default_rng(self.random_state)
-        scores = {(c, k, t): [] for c in self.n_components
-                  for k in self.n_neighbors for t in self.thresholds}
+        scores = {
+            (c, k, t): []
+            for c in self.n_components
+            for k in self.n_neighbors
+            for t in self.thresholds
+        }
 
         n_combos = len(scores)
         total = n_combos * self.n_splits
@@ -98,7 +109,9 @@ class grid_search_KNN:
             stratified_kfold_indices(y, self.n_splits, rng), 1
         ):
             params = fit_preprocess(
-                x[train_idx], self.names_, self.decisions_,
+                x[train_idx],
+                self.names_,
+                self.decisions_,
                 options=self.preprocess_options_,
             )
             x_train_fold = transform(x[train_idx], params)
@@ -110,13 +123,13 @@ class grid_search_KNN:
 
             for c in self.n_components:
                 for k in self.n_neighbors:
-                    knn = K_nearest_neighbors(n_neighbors=k,
-                                              batch_size=self.batch_size)
+                    knn = K_nearest_neighbors(n_neighbors=k, batch_size=self.batch_size)
                     knn.fit(z_train[:, :c], y[train_idx])
                     proba = knn.predict_proba(z_val[:, :c])
                     for t in self.thresholds:
                         scores[(c, k, t)].append(
-                            self.scoring(y_val, (proba > t).astype(int)))
+                            self.scoring(y_val, (proba > t).astype(int))
+                        )
                     done += len(self.thresholds)
                     if self.verbose:
                         elapsed = time.time() - start_time
@@ -126,19 +139,27 @@ class grid_search_KNN:
                             f"evaluations {done}/{total} ({done / total:.0%}) | "
                             f"elapsed {elapsed / 60:.1f} min, "
                             f"ETA {eta / 60:.1f} min",
-                            end="", flush=True,
+                            end="",
+                            flush=True,
                         )
 
         if self.verbose:
             print()
         self.results_ = [
-            {"n_components": c, "n_neighbors": k, "threshold": t,
-             "mean_score": np.mean(s), "std_score": np.std(s)}
+            {
+                "n_components": c,
+                "n_neighbors": k,
+                "threshold": t,
+                "mean_score": np.mean(s),
+                "std_score": np.std(s),
+            }
             for (c, k, t), s in scores.items()
         ]
         self.results_.sort(key=lambda r: r["mean_score"], reverse=True)
-        self.best_params_ = {key: self.results_[0][key] for key in
-                             ("n_components", "n_neighbors", "threshold")}
+        self.best_params_ = {
+            key: self.results_[0][key]
+            for key in ("n_components", "n_neighbors", "threshold")
+        }
         self.best_score_ = self.results_[0]["mean_score"]
         return self
 
@@ -149,9 +170,11 @@ class grid_search_KNN:
         )
         x_processed = transform(x, self.preprocess_params_)
         p = self.best_params_
-        self.model_ = K_nearest_neighbors(n_neighbors=p["n_neighbors"],
-                                          batch_size=self.batch_size,
-                                          threshold=p["threshold"])
+        self.model_ = K_nearest_neighbors(
+            n_neighbors=p["n_neighbors"],
+            batch_size=self.batch_size,
+            threshold=p["threshold"],
+        )
         self.pca_ = PCA(p["n_components"]).fit(x_processed)
         self.model_.fit(self.pca_.transform(x_processed), y)
         return self
@@ -159,3 +182,124 @@ class grid_search_KNN:
     def predict(self, x):
         x_processed = transform(x, self.preprocess_params_)
         return self.model_.predict(self.pca_.transform(x_processed))
+
+
+def hinge_loss(y, tx, w):
+    margins = y * (tx @ w)
+    return np.mean(np.maximum(0, 1 - margins))
+
+
+class Soft_margin_SVM:
+    """Soft-margin linear SVM
+
+    Labels can be given as {0, 1} or {-1, 1}; predict returns {0, 1}
+    """
+
+    def __init__(
+        self,
+        lambda_=1e-3,
+        gamma=0.5,
+        max_iters=100_000,
+        threshold=0.0,
+        fit_intercept=True,
+        random_state=42,
+    ):
+        self.lambda_ = lambda_
+        self.gamma = gamma
+        self.max_iters = max_iters
+        self.threshold = threshold
+        self.fit_intercept = fit_intercept
+        self.random_state = random_state
+
+    def _add_bias(self, x):
+        x = np.asarray(x, dtype=float)
+        if self.fit_intercept:
+            return np.c_[x, np.ones(len(x))]
+        return x
+
+    def fit(self, x, y, initial_w=None):
+        tx = self._add_bias(x)
+        y_pm = np.where(np.asarray(y) == 1, 1, -1)
+        rng = np.random.default_rng(self.random_state)
+        N, D = tx.shape
+        w = np.zeros(D) if initial_w is None else np.array(initial_w, dtype=float)
+        for t in range(self.max_iters):
+            n = rng.integers(N)
+            step = self.gamma / np.sqrt(t + 1)
+            if y_pm[n] * (tx[n] @ w) < 1:
+                subgrad = self.lambda_ * w - y_pm[n] * tx[n]
+            else:
+                subgrad = self.lambda_ * w
+            w = w - step * subgrad
+        self.w_ = w
+        self.loss_ = hinge_loss(y_pm, tx, w)
+        return self
+
+    def decision_function(self, x):
+        return self._add_bias(x) @ self.w_
+
+    def predict(self, x):
+        return (self.decision_function(x) >= self.threshold).astype(int)
+
+
+class Hard_margin_SVM:
+    """Hard-margin linear SVM
+
+    Labels can be given as {0, 1} or {-1, 1}; predict returns {0, 1}.
+    """
+
+    def __init__(
+        self,
+        max_epochs=1000,
+        tol=1e-6,
+        threshold=0.0,
+        fit_intercept=True,
+        random_state=42,
+        verbose=True,
+    ):
+        self.max_epochs = max_epochs
+        self.tol = tol
+        self.threshold = threshold
+        self.fit_intercept = fit_intercept
+        self.random_state = random_state
+        self.verbose = verbose
+
+    def _add_bias(self, x):
+        x = np.asarray(x, dtype=float)
+        if self.fit_intercept:
+            return np.c_[x, np.ones(len(x))]
+        return x
+
+    def fit(self, x, y):
+        tx = self._add_bias(x)
+        y_pm = np.where(np.asarray(y) == 1, 1, -1)
+        rng = np.random.default_rng(self.random_state)
+        N, D = tx.shape
+        alpha = np.zeros(N)
+        w = np.zeros(D)
+        sq_norms = np.sum(tx**2, axis=1)
+        self.converged_ = False
+        for epoch in range(self.max_epochs):
+            for n in rng.permutation(N):
+                if sq_norms[n] == 0:
+                    continue
+                gap = 1 - y_pm[n] * (tx[n] @ w)
+                new_alpha = max(0.0, alpha[n] + gap / sq_norms[n])
+                w = w + (new_alpha - alpha[n]) * y_pm[n] * tx[n]
+                alpha[n] = new_alpha
+            if np.min(y_pm * (tx @ w)) >= 1 - self.tol:
+                self.converged_ = True
+                break
+        if not self.converged_ and self.verbose:
+            print("Warning: constraints not satisfied, data may not be separable.")
+        self.w_ = w
+        self.alpha_ = alpha
+        self.support_ = np.where(alpha > 0)[0]
+        self.loss_ = hinge_loss(y_pm, tx, w)
+        return self
+
+    def decision_function(self, x):
+        return self._add_bias(x) @ self.w_
+
+    def predict(self, x):
+        return (self.decision_function(x) >= self.threshold).astype(int)

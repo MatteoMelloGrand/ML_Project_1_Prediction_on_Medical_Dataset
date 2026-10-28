@@ -76,41 +76,41 @@ SMOKDAY2,categorical,,,"<=10 distinct values: each answer, code and missing is i
 STOPSMK2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
 LASTSMK2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
 USENOW3,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
-ALCDAY5,continuous,777 999,555 888,"REVIEW codebook: unit-coded (1xx/2xx/3xx = per day/week/month), needs conversion"
+ALCDAY5,drop,,,drinking days coded per week/month; DROCDY3_ (drinks per day) is kept (codebook)
 AVEDRNK2,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
 DRNK3GE5,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
 MAXDRNKS,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
-FRUITJU1,continuous,777 999,555 888,"REVIEW codebook: unit-coded (1xx/2xx/3xx = per day/week/month), needs conversion"
-FRUIT1,continuous,777 999,555 888,"REVIEW codebook: unit-coded (1xx/2xx/3xx = per day/week/month), needs conversion"
-FVBEANS,continuous,777 999,555 888,"REVIEW codebook: unit-coded (1xx/2xx/3xx = per day/week/month), needs conversion"
-FVGREEN,continuous,777 999,555 888,"REVIEW codebook: unit-coded (1xx/2xx/3xx = per day/week/month), needs conversion"
-FVORANG,continuous,777 999,555 888,"REVIEW codebook: unit-coded (1xx/2xx/3xx = per day/week/month), needs conversion"
-VEGETAB1,continuous,777 999,555 888,"REVIEW codebook: unit-coded (1xx/2xx/3xx = per day/week/month), needs conversion"
+FRUITJU1,drop,,,coded per day/week/month; FTJUDA1_ (per day) is kept (codebook)
+FRUIT1,drop,,,coded per day/week/month; FRUTDA1_ (per day) is kept (codebook)
+FVBEANS,drop,,,coded per day/week/month; BEANDAY_ (per day) is kept (codebook)
+FVGREEN,drop,,,coded per day/week/month; GRENDAY_ (per day) is kept (codebook)
+FVORANG,drop,,,coded per day/week/month; ORNGDAY_ (per day) is kept (codebook)
+VEGETAB1,drop,,,coded per day/week/month; VEGEDA1_ (per day) is kept (codebook)
 EXERANY2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
 EXRACT11,categorical,,,"nominal labels (type of main exercise), not amounts (cell 7)"
-EXEROFT1,continuous,777 999,555 888,"REVIEW codebook: unit-coded (1xx/2xx/3xx = per day/week/month), needs conversion"
+EXEROFT1,drop,,,exercise frequency coded per week/month; PAFREQ1_ is kept (codebook)
 EXERHMM1,continuous,777 999,555 888,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
 EXRACT21,categorical,,,"nominal labels (type of second exercise), not amounts (cell 7)"
-EXEROFT2,continuous,777 999,555 888,"REVIEW codebook: unit-coded (1xx/2xx/3xx = per day/week/month), needs conversion"
+EXEROFT2,drop,,,exercise frequency coded per week/month; PAFREQ2_ is kept (codebook)
 EXERHMM2,continuous,777 999,555 888,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
-STRENGTH,continuous,777 999,555 888,"REVIEW codebook: unit-coded (1xx/2xx/3xx = per day/week/month), needs conversion"
+STRENGTH,drop,,,strength training coded per week/month; STRFREQ_ is kept (codebook)
 LMTJOIN3,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
 ARTHDIS2,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
 ARTHSOCL,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
 JOINPAIN,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
 SEATBELT,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
 FLUSHOT6,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
-FLSHTMY2,continuous,777777 999999,,"REVIEW codebook: date coded as MMYYYY, convert to 'months ago' or drop"
+FLSHTMY2,drop,,,date of last flu shot (MMYYYY); FLUSHOT6 is kept (codebook)
 IMFVPLAC,categorical,,,"nominal labels (place of flu shot), not amounts (cell 7)"
 PNEUVAC3,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
 HIVTST6,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
-HIVTSTD3,continuous,777777 999999,,"REVIEW codebook: date coded as MMYYYY, convert to 'months ago' or drop"
+HIVTSTD3,drop,,,date of last HIV test (MMYYYY); HIVTST6 is kept (codebook)
 WHRTST10,categorical,,,"nominal labels (place of last HIV test), not amounts (cell 7)"
 PDIABTST,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
 PREDIAB1,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
 INSULIN,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
-BLDSUGAR,continuous,777 999,555 888,"REVIEW codebook: unit-coded (1xx/2xx/3xx = per day/week/month), needs conversion"
-FEETCHK2,continuous,777 999,555 888,"REVIEW codebook: unit-coded (1xx/2xx/3xx = per day/week/month), needs conversion"
+BLDSUGAR,drop,,,"coded per day/week/month, diabetes module only (93% missing) (codebook)"
+FEETCHK2,drop,,,"coded per day/week/month, diabetes module only (93% missing) (codebook)"
 DOCTDIAB,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
 CHKHEMO3,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
 FEETCHK,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
@@ -142,7 +142,7 @@ CDHELP,categorical,,,"<=10 distinct values: each answer, code and missing is its
 CDSOCIAL,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
 CDDISCUS,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
 WTCHSALT,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
-LONGWTCH,continuous,777 999,555 888,"REVIEW codebook: unit-coded (1xx/2xx/3xx = per day/week/month), needs conversion"
+LONGWTCH,drop,,,"coded per day/week/month, salt module only (94% missing) (codebook)"
 DRADVISE,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"
 ASTHMAGE,continuous,77 98 99,88,"raw survey answer: 77/99 (777/999) -> missing, 88 (555/888) -> 0 (cell 8)"
 ASATTACK,categorical,,,"<=10 distinct values: each answer, code and missing is its own category (cells 7-8)"

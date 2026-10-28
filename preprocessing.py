@@ -7,7 +7,6 @@ applies it to any data. Each step can be turned off with the options argument,
 which we use for the ablation study.
 """
 import numpy as np
-from numpy.linalg import eig
 
 DEFAULT_OPTIONS = {
     "apply_drops": True,  # drop the columns marked "drop"
@@ -18,6 +17,7 @@ DEFAULT_OPTIONS = {
     "drop_first": False,  # use k-1 dummies (for least squares without regularization)
     "missing_indicators": True,  # add a 0/1 column marking missing values
     "standardize": True,  # standardize with the training mean and std
+    "bias": False,  # add a first column of ones (the intercept), not standardized
 }
 
 
@@ -127,19 +127,39 @@ def fit_preprocess(x, names, decisions, options=None):
     }
     if opt["standardize"]:
         raw = _build(x, params)
-        params["mean"] = raw.mean(axis=0, dtype=np.float64).astype(np.float32)
-        params["std"] = (raw.std(axis=0, dtype=np.float64) + 1e-8).astype(np.float32)
+        mean, std = _column_stats(raw)
+        if opt["bias"]:
+            mean[0], std[0] = 0.0, 1.0  # keep the intercept column equal to 1
+        params["mean"], params["std"] = mean, std
         del raw
     params["feature_names"] = _feature_names(params)
     return params
 
 
+def _column_stats(z, chunk_size=20000):
+    """Mean and std of every column, computed in chunks of rows.
+
+    Avoids the full float64 copy of the matrix that z.std(dtype=np.float64) makes.
+    """
+    n = z.shape[0]
+    total = np.zeros(z.shape[1])
+    for start in range(0, n, chunk_size):
+        total += z[start : start + chunk_size].sum(axis=0, dtype=np.float64)
+    mean = total / n
+    sq = np.zeros(z.shape[1])
+    for start in range(0, n, chunk_size):
+        sq += ((z[start : start + chunk_size] - mean) ** 2).sum(axis=0)
+    std = np.sqrt(sq / n) + 1e-8
+    return mean.astype(np.float32), std.astype(np.float32)
+
+
 def _n_out(params):
     """Return the number of columns of the output matrix."""
-    return sum(
+    n = sum(
         len(s["levels"]) if s["kind"] == "cat" else 1 + int(s["indicator"])
         for s in params["specs"]
     )
+    return n + int(params["options"]["bias"])
 
 
 def _build(x, params):
@@ -147,6 +167,9 @@ def _build(x, params):
     opt = params["options"]
     out = np.empty((x.shape[0], _n_out(params)), dtype=np.float32)
     k = 0
+    if opt["bias"]:
+        out[:, 0] = 1.0
+        k = 1
     for s in params["specs"]:
         if opt["apply_codes"]:
             col = _apply_codes(
@@ -170,7 +193,7 @@ def _build(x, params):
 
 
 def _feature_names(params):
-    out = []
+    out = ["bias"] if params["options"]["bias"] else []
     for s in params["specs"]:
         if s["kind"] == "cat":
             out += [
@@ -209,6 +232,7 @@ def print_report(params, show=("dropped", "one-hot", "continuous"), max_rows=Non
         print(f"\n--- {what} ({len(rows)}) ---")
         for name, _, detail, reason in rows[:max_rows]:
             print(f"  {name:10s} {detail[:60]:60s} | {reason}")
+
 
 class PCA:
     """PCA from scratch: standardize, eigendecompose the covariance, project.

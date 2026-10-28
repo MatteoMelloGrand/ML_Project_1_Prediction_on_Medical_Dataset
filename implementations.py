@@ -16,17 +16,18 @@ def mean_squared_error_gd(y, tx, initial_w, max_iters, gamma):
     return w, final_loss
 
 
-def mean_squared_error_sgd(y, tx, initial_w, max_iters, gamma):
+def mean_squared_error_sgd(y, tx, initial_w, max_iters, gamma, seed=1):
     """Linear regression using stochastic gradient descent.
 
-    Uses mini-batch size 1 (one random data point per step).
+    Uses mini-batch size 1 (one random data point per step). The seed makes the
+    sampled data points, and therefore the result, reproducible.
     Returns the last weight vector w and its MSE loss on the full dataset.
     """
-
+    rng = np.random.default_rng(seed)
     w = initial_w
     N = len(y)
     for n_iter in range(max_iters):
-        n = np.random.randint(N)
+        n = rng.integers(N)
         e_n = y[n] - tx[n].dot(w)
         grad = -tx[n] * e_n
         w = w - gamma * grad
@@ -72,7 +73,7 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
         grad = tx.T @ (sigma - y) / N
         w = w - gamma * grad
     z = tx @ w
-    loss = np.mean(np.log(1 + np.exp(z)) - y * z)
+    loss = np.mean(np.logaddexp(0, z) - y * z)  # log(1 + e^z), without overflow
     return w, loss
 
 
@@ -88,5 +89,5 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
         grad = tx.T @ (sigma - y) / N + 2 * lambda_ * w
         w = w - gamma * grad
     z = tx @ w
-    loss = np.mean(np.log(1 + np.exp(z)) - y * z)
+    loss = np.mean(np.logaddexp(0, z) - y * z)  # log(1 + e^z), without overflow
     return w, loss

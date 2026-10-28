@@ -28,7 +28,6 @@ def stratified_kfold_indices(y, n_splits, rng):
 
 
 class K_nearest_neighbors:
-
     def __init__(self, n_neighbors=5, batch_size=32, threshold=0.5):
         self.n_neighbors = n_neighbors
         self.batch_size = batch_size
@@ -212,9 +211,11 @@ class Soft_margin_SVM:
         self.random_state = random_state
 
     def _add_bias(self, x):
-        x = np.asarray(x, dtype=float)
+        x = np.asarray(x)
+        if x.dtype not in (np.float32, np.float64):
+            x = x.astype(float)  # keep float32 input as float32 to save memory
         if self.fit_intercept:
-            return np.c_[x, np.ones(len(x))]
+            return np.c_[x, np.ones(len(x), dtype=x.dtype)]
         return x
 
     def fit(self, x, y, initial_w=None):
@@ -265,9 +266,11 @@ class Hard_margin_SVM:
         self.verbose = verbose
 
     def _add_bias(self, x):
-        x = np.asarray(x, dtype=float)
+        x = np.asarray(x)
+        if x.dtype not in (np.float32, np.float64):
+            x = x.astype(float)  # keep float32 input as float32 to save memory
         if self.fit_intercept:
-            return np.c_[x, np.ones(len(x))]
+            return np.c_[x, np.ones(len(x), dtype=x.dtype)]
         return x
 
     def fit(self, x, y):

@@ -174,14 +174,19 @@ def run_models(x, y, names, decisions, folds, with_gd, with_knn):
             )
 
         # least squares and ridge regression (implementations.py), thresholded scores
+        # indicator columns of the same survey module are identical, so X^T X is
+        # singular: solve either fails or returns huge/nan weights
         try:
             w, _ = least_squares(y_tr, z_tr)
-            add("least squares", z_tr @ w, z_va @ w, False)
+            singular = not np.all(np.isfinite(w)) or np.max(np.abs(w)) > 1e6
         except np.linalg.LinAlgError:
-            # indicator columns of the same survey module are identical
+            singular = True
+        if singular:
             per_model.setdefault("least squares (X^T X singular)", []).append(
                 {"f1": np.nan, "acc": np.nan, "thr": np.nan}
             )
+        else:
+            add("least squares", z_tr @ w, z_va @ w, False)
         for lam in RIDGE_LAMBDAS:
             w, _ = ridge_regression(y_tr, z_tr, lam)
             add(f"ridge regression (lambda={lam:g})", z_tr @ w, z_va @ w, False)

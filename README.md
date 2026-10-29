@@ -10,22 +10,22 @@ EPFL CS-433 Machine Learning, Project 1 (Fall 2026).
 
 ## Repository structure
 
-| Path                       | Content                                                                                                                                                           |
-| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `implementations.py`       | The 6 required methods (`mean_squared_error_gd`, `mean_squared_error_sgd`, `least_squares`, `ridge_regression`, `logistic_regression`, `reg_logistic_regression`) |
-| `run.py`                   | Trains the final model and writes the submission (reproduces our best AIcrowd submission)                                                                         |
-| `experiments.py`           | Cross-validation experiments for the report: preprocessing ablation and model comparison                                                                          |
-| `modeling.py`              | Logistic regression with Newton's method, F1 score, threshold selection, stratified folds                                                                         |
-| `extra_implementations.py` | Additional models: K-nearest neighbors, grid search, linear SVMs                                                                                                  |
-| `preprocessing.py`         | Preprocessing driven by `decisions/column_decisions.csv`, and PCA                                                                                                 |
-| `column_analysis.py`       | Functions that measure the columns of the dataset                                                                                                                 |
-| `helpers.py`               | Course helper functions (`load_csv_data`, `create_csv_submission`), unchanged                                                                                     |
-| `notebooks/`               | `01_column_analysis.ipynb` (column decisions, Figure 1), `K_NN.ipynb` (KNN tuning)                                                                                |
-| `decisions/`               | `column_decisions.csv`: how each column is handled, with the reason                                                                                               |
-| `results/`                 | Tables produced by `experiments.py`                                                                                                                               |
-| `figures/`                 | Figures used in the report                                                                                                                                        |
-| `submissions/`             | `submission.csv`: the predictions submitted to AIcrowd (submission 338157), produced by `run.py`                                                                  |
-| `data/`                    | Dataset (not committed, see Setup)                                                                                                                                |
+| Path | Content |
+| --- | --- |
+| `implementations.py` | The 6 required methods (`mean_squared_error_gd`, `mean_squared_error_sgd`, `least_squares`, `ridge_regression`, `logistic_regression`, `reg_logistic_regression`) |
+| `run.py` | Trains the final model and writes the submission (reproduces our best AIcrowd submission) |
+| `experiments.py` | Cross-validation experiments for the report: preprocessing ablation and model comparison |
+| `modeling.py` | Logistic regression with Newton's method, F1 score, threshold selection, stratified folds |
+| `extra_implementations.py` | Additional models: K-nearest neighbors, grid search, linear SVMs |
+| `preprocessing.py` | Preprocessing driven by `decisions/column_decisions.csv`, and PCA |
+| `column_analysis.py` | Functions that measure the columns of the dataset |
+| `helpers.py` | Course helper functions (`load_csv_data`, `create_csv_submission`), unchanged |
+| `notebooks/` | `01_column_analysis.ipynb` (column decisions, Figure 1), `K_NN.ipynb` (KNN tuning) |
+| `decisions/` | `column_decisions.csv`: how each column is handled, with the reason |
+| `results/` | Tables produced by `experiments.py` |
+| `figures/` | Figures used in the report |
+| `submissions/` | `submission.csv`: the predictions submitted to AIcrowd (submission 338161), produced by `run.py` |
+| `data/` | Dataset (not committed, see Setup) |
 
 ## Setup
 
@@ -56,19 +56,27 @@ To reproduce the tables and figures of the report:
 ```bash
 python experiments.py ablation          # Table 1, results/ablation.csv
 python experiments.py models --gd --knn # Table 2 and Figure 2, results/models.csv
+python experiments.py final             # threshold used by run.py, results/final_candidates.csv
 ```
 
 ## Results
 
-|                                                | F1            | Accuracy |
-| ---------------------------------------------- | ------------- | -------- |
-| 5-fold cross-validation (training data)        | 0.431 ± 0.006 | 0.874    |
-| AIcrowd public leaderboard (submission 338157) | 0.443         | 0.878    |
+| | F1 | Accuracy |
+| --- | --- | --- |
+| 5-fold CV, without `HAREHAB1` (model analysed in the report) | 0.431 ± 0.006 | 0.874 |
+| 5-fold CV, with `HAREHAB1` (submitted model) | 0.439 ± 0.006 | |
+| AIcrowd, without `HAREHAB1` (submission 338157) | 0.443 | 0.878 |
+| AIcrowd, with `HAREHAB1` (submission 338161, final) | 0.451 | 0.877 |
 
 Final model: L2-regularized logistic regression trained with Newton's method,
-lambda = 1e-4, decision threshold 0.205 (both chosen by cross-validation in
-`experiments.py`). Full tables: `results/models.csv` (model comparison) and
-`results/ablation.csv` (preprocessing ablation).
+lambda = 1e-4, decision threshold 0.195 (chosen on out-of-fold predictions by
+`python experiments.py final`). Full tables: `results/models.csv` (model comparison),
+`results/ablation.csv` (preprocessing ablation) and `results/final_candidates.csv`.
+
+`HAREHAB1` (cardiac rehabilitation) is only asked after a heart attack, so it leaks
+the label and stays dropped in `decisions/column_decisions.csv`. For the competition
+submission only, `run.py` adds it back with `modeling.with_leaky_column`; the report
+explains why.
 
 ## Data analysis and preprocessing
 

@@ -21,7 +21,9 @@ from implementations import least_squares, ridge_regression, reg_logistic_regres
 from extra_implementations import K_nearest_neighbors, Soft_margin_SVM
 from preprocessing import PCA
 from modeling import (
+    INTERACTIONS,
     THRESHOLDS,
+    with_leaky_column,
     best_threshold,
     f1_per_threshold,
     f1_score,
@@ -36,16 +38,20 @@ LAMBDAS = [1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1]
 POS_WEIGHTS = [3.0, 10.0]
 RIDGE_LAMBDAS = [1e-5, 1e-3]
 GD_LAMBDA, GD_GAMMA, GD_ITERS = 1e-4, 0.2, 300
-KNN_COMPONENTS, KNN_NEIGHBORS, KNN_THRESHOLD = (
-    15,
-    20,
-    0.1,
-)  # best values from K_NN.ipynb
+KNN_COMPONENTS, KNN_NEIGHBORS, KNN_THRESHOLD = 15, 30, 0.1  # best in K_NN.ipynb
 
 
-def evaluate(y_tr, s_tr, y_va, s_va):
-    """Choose the threshold on the training scores, evaluate on the validation fold."""
-    t = best_threshold(y_tr, s_tr)
+def evaluate(y_tr, s_tr, y_va, s_va, probability=True):
+    """Choose the threshold on the training scores, evaluate on the validation fold.
+
+    For scores that are not probabilities (least squares, ridge, SVM), candidate
+    thresholds are taken from the upper half of the training scores instead of the
+    fixed grid in [0.02, 0.8].
+    """
+    if probability:
+        t = best_threshold(y_tr, s_tr)
+    else:
+        t = best_threshold(y_tr, s_tr, np.quantile(s_tr, np.linspace(0.5, 0.995, 200)))
     pred = (s_va >= t).astype(int)
     return {"f1": f1_score(y_va, pred), "acc": np.mean(pred == y_va), "thr": t}
 
@@ -162,13 +168,15 @@ def run_models(x, y, names, decisions, folds, with_gd, with_knn):
         z_tr, z_va = transform(x[tr], prm), transform(x[va], prm)
         y_tr, y_va = y[tr], y[va]
 
-        def add(name, s_tr, s_va):
-            per_model.setdefault(name, []).append(evaluate(y_tr, s_tr, y_va, s_va))
+        def add(name, s_tr, s_va, probability=True):
+            per_model.setdefault(name, []).append(
+                evaluate(y_tr, s_tr, y_va, s_va, probability)
+            )
 
         # least squares and ridge regression (implementations.py), thresholded scores
         try:
             w, _ = least_squares(y_tr, z_tr)
-            add("least squares", z_tr @ w, z_va @ w)
+            add("least squares", z_tr @ w, z_va @ w, False)
         except np.linalg.LinAlgError:
             # indicator columns of the same survey module are identical
             per_model.setdefault("least squares (X^T X singular)", []).append(
@@ -176,7 +184,7 @@ def run_models(x, y, names, decisions, folds, with_gd, with_knn):
             )
         for lam in RIDGE_LAMBDAS:
             w, _ = ridge_regression(y_tr, z_tr, lam)
-            add(f"ridge regression (lambda={lam:g})", z_tr @ w, z_va @ w)
+            add(f"ridge regression (lambda={lam:g})", z_tr @ w, z_va @ w, False)
 
         # logistic regression with Newton's method; lambda grid with warm starts
         w = None
@@ -207,6 +215,7 @@ def run_models(x, y, names, decisions, folds, with_gd, with_knn):
             "linear SVM (hinge loss, SGD)",
             svm.decision_function(z_tr),
             svm.decision_function(z_va),
+            False,
         )
 
         if with_gd:
@@ -294,9 +303,59 @@ def plot_figure2(lam_curves, lam_rows, best_lam):
     print("saved figures/fig2_threshold_lambda.pdf")
 
 
+def run_final(x, y, names, decisions, folds, only):
+    """Candidates for the submitted model: 5-fold CV, threshold also chosen out-of-fold."""
+    candidates = [
+        ("evidence-based preprocessing (no HAREHAB1)", decisions, {}),
+        ("+ HAREHAB1", with_leaky_column(decisions), {}),
+        (
+            "+ HAREHAB1 + age interactions",
+            with_leaky_column(decisions),
+            {"interactions": INTERACTIONS},
+        ),
+    ]
+    table = []
+    for c, (label, dec, options) in enumerate(candidates):
+        if only is not None and c != only:
+            continue
+        t0, rows = time.time(), []
+        oof = np.zeros(len(y))
+        for i, va in enumerate(folds):
+            tr = np.concatenate([f for j, f in enumerate(folds) if j != i])
+            prm = fit_preprocess(x[tr], names, dec, dict(options, bias=True))
+            z_tr, z_va = transform(x[tr], prm), transform(x[va], prm)
+            w, _ = logistic_newton(y[tr], z_tr, LAMBDA_ABLATION)
+            s_tr = sigmoid(z_tr @ w.astype(np.float32))
+            oof[va] = sigmoid(z_va @ w.astype(np.float32))
+            rows.append(evaluate(y[tr], s_tr, y[va], oof[va]))
+            del z_tr, z_va
+        res = summarize(rows)
+        t_oof = best_threshold(y, oof)
+        f1_oof = [f1_score(y[va], (oof[va] >= t_oof).astype(int)) for va in folds]
+        table.append(
+            {
+                "candidate": label,
+                "f1": res["f1"],
+                "f1_std": res["f1_std"],
+                "oof_threshold": t_oof,
+                "f1_oof_threshold": float(np.mean(f1_oof)),
+                "f1_oof_threshold_std": float(np.std(f1_oof)),
+            }
+        )
+        print(
+            f"{label:46s} F1 {res['f1']:.4f} +- {res['f1_std']:.4f} | out-of-fold threshold {t_oof:.3f}: F1 {np.mean(f1_oof):.4f}  ({time.time() - t0:.0f}s)",
+            flush=True,
+        )
+    suffix = "" if only is None else f"_{only}"
+    save_table(f"results/final_candidates{suffix}.csv", table)
+
+
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("group", choices=["ablation", "models"])
+    parser.add_argument("group", choices=["ablation", "models", "final"])
+    parser.add_argument(
+        "--only", type=int, default=None, help="final: run one candidate"
+    )
     parser.add_argument("--folds", type=int, default=5)
     parser.add_argument("--gd", action="store_true", help="also gradient descent")
     parser.add_argument("--knn", action="store_true", help="also KNN + PCA")
@@ -313,6 +372,8 @@ def main():
     folds = stratified_folds(y, args.folds, SEED)
     if args.group == "ablation":
         run_ablation(x, y, names, decisions, folds)
+    elif args.group == "final":
+        run_final(x, y, names, decisions, folds, args.only)
     else:
         run_models(x, y, names, decisions, folds, args.gd, args.knn)
 

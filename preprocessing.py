@@ -18,6 +18,8 @@ DEFAULT_OPTIONS = {
     "missing_indicators": True,  # add a 0/1 column marking missing values
     "standardize": True,  # standardize with the training mean and std
     "bias": False,  # add a first column of ones (the intercept), not standardized
+    "interactions": (),  # categorical columns whose answers are multiplied by age
+    "interaction_with": "_AGE80",  # the continuous column used for interactions
 }
 
 
@@ -118,8 +120,15 @@ def fit_preprocess(x, names, decisions, options=None):
             )
             report.append((name, "continuous", detail, reason))
 
+    by_name = {s["name"]: s for s in specs}
+    inter = [n for n in opt["interactions"] if by_name.get(n, {}).get("kind") == "cat"]
+    if inter and opt["interaction_with"] not in by_name:
+        inter = []
+    for n in inter:
+        report.append((n, "interaction", f"x {opt['interaction_with']}", "option"))
     params = {
         "specs": specs,
+        "interactions": inter,
         "options": opt,
         "mean": None,
         "std": None,
@@ -159,6 +168,8 @@ def _n_out(params):
         len(s["levels"]) if s["kind"] == "cat" else 1 + int(s["indicator"])
         for s in params["specs"]
     )
+    by_name = {s["name"]: s for s in params["specs"]}
+    n += sum(len(by_name[c]["levels"]) for c in params.get("interactions", []))
     return n + int(params["options"]["bias"])
 
 
@@ -189,6 +200,18 @@ def _build(x, params):
             col[miss] = s["median"]
             out[:, k] = col
             k += 1
+    inter = params.get("interactions", [])
+    if inter:
+        by_name = {s["name"]: s for s in params["specs"]}
+        a = by_name[opt["interaction_with"]]
+        age = _apply_codes(x[:, a["j"]], a["decision"], as_continuous=True)
+        age[np.isnan(age)] = a["median"]
+        for c in inter:
+            s = by_name[c]
+            col = _apply_codes(x[:, s["j"]], s["decision"], as_continuous=False)
+            for v in s["levels"]:
+                out[:, k] = (np.isnan(col) if np.isnan(v) else (col == v)) * age
+                k += 1
     return out
 
 
@@ -204,6 +227,13 @@ def _feature_names(params):
             if s["indicator"]:
                 out.append(f"{s['name']}_missing")
             out.append(s["name"])
+    by_name = {s["name"]: s for s in params["specs"]}
+    age = params["options"]["interaction_with"]
+    for c in params.get("interactions", []):
+        out += [
+            f"{c}=missing*{age}" if np.isnan(v) else f"{c}={v:g}*{age}"
+            for v in by_name[c]["levels"]
+        ]
     return out
 
 

@@ -9,6 +9,29 @@ import numpy as np
 
 THRESHOLDS = np.linspace(0.02, 0.8, 157)
 
+# answers of these columns are multiplied by age (_AGE80) in the submitted model
+INTERACTIONS = (
+    "SEX",
+    "GENHLTH",
+    "BPHIGH4",
+    "TOLDHI2",
+    "DIABETE3",
+    "CVDSTRK3",
+    "CHCKIDNY",
+)
+
+
+def with_leaky_column(decisions, name="HAREHAB1"):
+    """Copy of the decisions in which the leaky column is kept as categorical.
+
+    HAREHAB1 (cardiac rehabilitation) is only asked after a heart attack, so its
+    presence reveals the label. It is excluded from our analysis, but it is part of
+    the test data, so the submitted model uses it (see the report).
+    """
+    out = dict(decisions)
+    out[name] = dict(decisions[name], action="categorical")
+    return out
+
 
 def sigmoid(t):
     """Logistic function, clipped to avoid overflow in exp."""

@@ -2,9 +2,10 @@
 
     python run.py
 
-Steps: load the data, preprocess it with the column decisions, train
-L2-regularized logistic regression with Newton's method, and classify the test
-set with the decision threshold chosen by cross-validation (experiments.py).
+Steps: load the data, preprocess it with the column decisions (plus the column
+HAREHAB1, see modeling.with_leaky_column), train L2-regularized logistic
+regression with Newton's method, and classify the test set with the decision
+threshold chosen by cross-validation (python experiments.py final).
 Everything is deterministic, so the output file is identical on every run.
 """
 import os
@@ -14,7 +15,7 @@ import numpy as np
 
 from column_analysis import load_data, load_decisions
 from helpers import create_csv_submission
-from modeling import f1_score, logistic_newton, sigmoid
+from modeling import f1_score, logistic_newton, sigmoid, with_leaky_column
 from preprocessing import fit_preprocess, transform
 
 DATA_PATH = "data/"
@@ -22,16 +23,17 @@ CACHE_PATH = "data/cache.npz"
 DECISIONS_PATH = "decisions/column_decisions.csv"
 OUTPUT_PATH = "submissions/submission.csv"
 
-# chosen by 5-fold cross-validation in experiments.py (python experiments.py models)
+# chosen by 5-fold cross-validation in experiments.py: lambda in "models",
+# the threshold on out-of-fold predictions in "final"
 LAMBDA = 0.0001
-THRESHOLD = 0.205
+THRESHOLD = 0.195
 
 
 def main():
     t0 = time.time()
     x_train, x_test, y_train, _, test_ids, names = load_data(DATA_PATH, CACHE_PATH)
     y = (y_train == 1).astype(np.float32)  # labels {-1, 1} -> {0, 1}
-    decisions = load_decisions(DECISIONS_PATH)
+    decisions = with_leaky_column(load_decisions(DECISIONS_PATH))
 
     params = fit_preprocess(x_train, names, decisions, {"bias": True})
     z_train = transform(x_train, params)
